@@ -1,0 +1,28 @@
+.form-group {
+    width: 30%;
+    margin-left: 10%;
+}
+
+form input {
+    display: block;
+    margin: 10px;
+}
+
+ul.nav {
+    font-size: 24px;
+    text-decoration: none;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.delete-btn {
+    float: right;
+    margin-top: 2px;
+}
+
+.weather-bar {
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    padding: 20px;
+}
