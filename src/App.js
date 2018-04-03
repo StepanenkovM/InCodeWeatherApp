@@ -10,21 +10,29 @@ class App extends Component {
         super(props);
         this.state = {
             activeCity: 0,
-            listOfCities: ['Kiev']
+            listOfCities: ['Kiev'],
+            dataBaseWeather: []
         }
     }
 
     addCity() {
         const newCity = this.inputCity.value;
         const newList = [...this.state.listOfCities, newCity];
+        let response;
+        let newDB;
 
-        if(newCity) {
-            this.setState({
-                activeCity: this.state.activeCity,
-                listOfCities: newList
-            });
-        }
-        this.inputCity.value = '';
+        fetch('http://api.openweathermap.org/data/2.5/weather?q=' + newCity + '&appid=bc1e15fa138b3c3e13ae8b561ca80f72').then(res => res.json()).then(json => {
+            response = json;
+            if(newCity && this.state.listOfCities.indexOf(newCity) === -1 && response.cod === 200) {
+                newDB = [...this.state.dataBaseWeather, json];
+                this.setState({
+                    activeCity: this.state.activeCity,
+                    listOfCities: newList,
+                    dataBaseWeather: newDB
+                });
+            }
+            this.inputCity.value = '';
+        });
     }
 
     deleteCity(index) {

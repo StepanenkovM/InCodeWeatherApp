@@ -11,7 +11,6 @@ class WeatherContainer extends Component {
 
     componentDidMount() {
         this.reloadData();
-        setInterval(() => {this.reloadData()}, 600000);
     }
 
     reloadData() {
