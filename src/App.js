@@ -22,22 +22,22 @@ class App extends Component {
         for (let i = 0; i < this.state.dataBaseWeather.length; i++) {
             fetch('http://api.openweathermap.org/data/2.5/weather?q=' + this.state.listOfCities[i] + '&appid=bc1e15fa138b3c3e13ae8b561ca80f72').then(res => res.json()).then(json => {
                 response = json;
+                newDB = this.state.dataBaseWeather;
+                newDB[i] = response;
                 if(response.cod === 200) {
-
-                    newDB = [...this.state.dataBaseWeather, json];
                     this.setState({
                         activeCity: this.state.activeCity,
                         listOfCities: this.state.listOfCities,
                         dataBaseWeather: newDB
                     });
                 }
-                console.log('request');
+                console.log(this.state);
             });
         }
     }
 
     componentDidMount() {
-        setInterval(this.reloadData.bind(this), 600000);
+        setInterval(this.reloadData.bind(this), 10000);
     }
 
     addCity() {
@@ -58,7 +58,6 @@ class App extends Component {
                 });
             }
             this.inputCity.value = '';
-            this.reloadData();
         });
     }
 
