@@ -10,20 +10,46 @@ class App extends Component {
         super(props);
         this.state = {
             activeCity: 0,
-            listOfCities: ['Kiev'],
+            listOfCities: [],
             dataBaseWeather: []
         }
+    }
+
+    reloadData() {
+        let response;
+        let newDB = [];
+
+        for (let i = 0; i < this.state.dataBaseWeather.length; i++) {
+            fetch('http://api.openweathermap.org/data/2.5/weather?q=' + this.state.listOfCities[i] + '&appid=bc1e15fa138b3c3e13ae8b561ca80f72').then(res => res.json()).then(json => {
+                response = json;
+                if(response.cod === 200) {
+
+                    newDB = [...this.state.dataBaseWeather, json];
+                    this.setState({
+                        activeCity: this.state.activeCity,
+                        listOfCities: this.state.listOfCities,
+                        dataBaseWeather: newDB
+                    });
+                }
+                console.log('request');
+            });
+        }
+    }
+
+    componentDidMount() {
+        setInterval(this.reloadData.bind(this), 600000);
     }
 
     addCity() {
         const newCity = this.inputCity.value;
         const newList = [...this.state.listOfCities, newCity];
         let response;
-        let newDB;
+        let newDB = [];
 
         fetch('http://api.openweathermap.org/data/2.5/weather?q=' + newCity + '&appid=bc1e15fa138b3c3e13ae8b561ca80f72').then(res => res.json()).then(json => {
             response = json;
             if(newCity && this.state.listOfCities.indexOf(newCity) === -1 && response.cod === 200) {
+
                 newDB = [...this.state.dataBaseWeather, json];
                 this.setState({
                     activeCity: this.state.activeCity,
@@ -32,6 +58,7 @@ class App extends Component {
                 });
             }
             this.inputCity.value = '';
+            this.reloadData();
         });
     }
 
@@ -102,7 +129,7 @@ class App extends Component {
                             </Nav>
                         </Col>
                         <Col md={8} sm={8} className="weather-bar">
-                            <WeatherContainer key={activeCity} zip={this.state.listOfCities[activeCity]}/>
+                            <WeatherContainer key={activeCity} zip={this.state.dataBaseWeather[activeCity]}/>
                         </Col>
                     </Row>
                 </Grid>

@@ -11,7 +11,6 @@ class Map extends Component {
     };
 
     render() {
-        console.log(this.props.lon);
         return (
             <div className="google-map" style={{height: '500px'}}>
                 <GoogleMapReact defaultCenter={{lat: this.props.lat, lng: this.props.lon}} defaultZoom={this.props.zoom}>
